@@ -1,0 +1,25 @@
+/* @layer components { */
+  /* Glassmorphism for Dashboard Cards */
+  /* .glass-panel {
+    @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-white/20 dark:border-slate-800/50;
+  } */
+
+  /* Custom Scrollbar for the Sidebar and Data Tables */
+  /* .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  } */
+/* 
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+  } */
+
+  /* Financial Value Transitions */
+  /* .value-transition {
+    @apply transition-all duration-500 ease-out;
+  }
+} */
