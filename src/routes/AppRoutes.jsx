@@ -26,31 +26,37 @@ const AppRoutes = () => {
     <Routes>
       {/* Public Auth Routes */}
       <Route element={<AuthLayout />}>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
       </Route>
 
       {/* Protected SaaS Routes */}
       <Route element={<PrivateRoute />}>
-        <Route element={<DashboardLayout />}>
+        <Route path="/" element={<DashboardLayout />}>
+          {/* 
+            'index' makes this the default view when on "/". 
+            Matches Sidebar path: "/" 
+          */}
+          <Route index element={<Dashboard />} />
+          
           {/* General Access Pages */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/expenses" element={<ExpenseList />} />
-          <Route path="/profile" element={<ProfileSettings />} />
+          <Route path="expenses" element={<ExpenseList />} />
+          {/* Matches Sidebar path: "/settings" */}
+          <Route path="settings" element={<ProfileSettings />} />
+          <Route path="profile" element={<ProfileSettings />} />
 
           {/* Admin/Founder Only Pages */}
           <Route element={<RoleRoute allowedRoles={['founder', 'finance_manager']} />}>
-            <Route path="/teams" element={<TeamList />} />
-            <Route path="/employees" element={<EmployeeList />} />
-            <Route path="/analytics" element={<AdvancedAnalytics />} />
-            <Route path="/reports" element={<MonthlyReports />} />
+            <Route path="teams" element={<TeamList />} />
+            <Route path="employees" element={<EmployeeList />} />
+            <Route path="analytics" element={<AdvancedAnalytics />} />
+            <Route path="reports" element={<MonthlyReports />} />
           </Route>
         </Route>
       </Route>
 
-      {/* Global Fallback */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      {/* Global Fallback: If user hits a weird URL, send them to the root */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

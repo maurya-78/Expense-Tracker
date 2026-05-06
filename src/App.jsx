@@ -11,43 +11,43 @@ import { Toaster } from './components/ui/toaster';
  * Root Application Component
  */
 function App() {
-  const { isDarkMode } = useThemeStore();
-
-  // Safe fallback if auth store is incomplete
-  const authStore = useAuthStore?.() || {};
-
-  // Prevent crash if initializeAuth does not exist
-  const initializeAuth = authStore.initializeAuth || (() => {});
+  // Use a selector for better performance
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
 
   /**
-   * Initialize Auth
+   * Initialize Auth on Mount
    */
   useEffect(() => {
-    initializeAuth();
-  }, []);
+    if (initializeAuth) {
+      initializeAuth();
+    }
+  }, [initializeAuth]);
 
   /**
-   * Sync Theme
+   * Sync Theme - Ensures the 'dark' class is present on the document root.
+   * This is redundant but helpful if the store rehydrates after the initial render.
    */
   useEffect(() => {
+    const root = window.document.documentElement;
     if (isDarkMode) {
-      document.documentElement.classList.add('dark');
+      root.classList.add('dark');
     } else {
-      document.documentElement.classList.remove('dark');
+      root.classList.remove('dark');
     }
   }, [isDarkMode]);
 
   return (
-    <div
-      className={`${
-        isDarkMode ? 'dark' : ''
-      } min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300`}
-    >
-      <Router>
-        <AppRoutes />
-
-        <Toaster />
-      </Router>
+    // 'dark' class here ensures components using Tailwind's dark: variants respond correctly
+    <div className={isDarkMode ? 'dark' : ''}>
+      <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+        <Router>
+          <AppRoutes />
+          
+          {/* Global UI Components */}
+          <Toaster />
+        </Router>
+      </div>
     </div>
   );
 }

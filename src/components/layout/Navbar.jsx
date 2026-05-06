@@ -1,29 +1,30 @@
 import { useState } from 'react';
 import { Search, Bell, Sun, Moon, Menu, User, Settings, LogOut, ChevronDown } from 'lucide-react';
 import { useThemeStore } from '../../store/useThemeStore';
-import { useAuthStore } from '../../store/useAuthStore'; // Import Auth Store
+import { useAuthStore } from '../../store/useAuthStore';
 import { Link } from 'react-router-dom';
 
 const Navbar = ({ onMenuClick }) => {
   const { isDarkMode, toggleTheme } = useThemeStore();
-  const { user, logout } = useAuthStore(); // Get user data and logout function
+  const { user, logout } = useAuthStore();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   return (
     <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40 px-4 lg:px-8 transition-colors duration-300">
       <div className="h-full flex items-center justify-between">
         
-        {/* Mobile Toggle & Brand (Optional) */}
-        <div className="flex items-center gap-4">
+        {/* Mobile Toggle - FIXED: Visible on Mobile, Hidden on Desktop (lg and up) */}
+        <div className="flex items-center gap-4 lg:hidden"> 
           <button 
             onClick={onMenuClick}
-            className="lg:hidden p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+            className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+            aria-label="Open Menu"
           >
             <Menu size={24} />
           </button>
         </div>
 
-        {/* Search Bar (Desktop) */}
+        {/* Search Bar (Desktop) - Hidden on mobile, visible on md and up */}
         <div className="hidden md:flex items-center bg-slate-50 dark:bg-slate-800 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 w-96 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all">
           <Search size={18} className="text-slate-400 mr-2" />
           <input 
@@ -35,12 +36,13 @@ const Navbar = ({ onMenuClick }) => {
 
         {/* Action Group */}
         <div className="flex items-center gap-2">
-          {/* Runway Stats (Desktop) */}
+          {/* Runway Stats - Hidden on mobile/tablet, visible only on large desktop */}
           <div className="hidden xl:block text-right mr-4 border-r border-slate-200 dark:border-slate-800 pr-6">
             <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Est. Runway</p>
             <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400">14.2 Months</p>
           </div>
 
+          {/* Theme Toggle */}
           <button 
             onClick={toggleTheme}
             className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition"
@@ -49,6 +51,7 @@ const Navbar = ({ onMenuClick }) => {
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
+          {/* Notifications */}
           <div className="relative">
             <button className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition">
               <Bell size={20} />
