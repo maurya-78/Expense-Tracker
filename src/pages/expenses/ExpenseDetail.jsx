@@ -1,115 +1,181 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Download, Trash2, Edit3, ShieldCheck } from 'lucide-react';
-import { Card, CardContent } from '../../components/ui/card';
+import { motion } from 'framer-motion';
+import { 
+  ArrowLeft, 
+  Edit3, 
+  Trash2, 
+  Download, 
+  ExternalLink, 
+  Clock, 
+  CheckCircle2, 
+  ShieldAlert,
+  FileText,
+  User,
+  Building,
+  Calendar,
+  DollarSign
+} from 'lucide-react';
 import { Button } from '../../components/ui/button';
-import StatusBadge from '../../components/common/StatusBadge';
-import { formatCurrency } from '../../lib/utils';
+import { Card } from '../../components/ui/card';
+import { useFinanceStore } from '../../store/useFinanceStore';
+import { formatCurrency, cn } from '../../lib/utils';
 
-const ExpenseDetail = () => {
+const ExpenseDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { expenses, deleteExpense } = useFinanceStore();
+  const [expense, setExpense] = useState(null);
 
-  // Mock data for demonstration
-  const expense = {
-    title: "AWS Monthly Infrastructure",
-    amount: 1450.20,
-    date: "March 24, 2026",
-    category: "Infrastructure",
-    team: "Engineering",
-    addedBy: "Alex Rivera",
-    status: "Paid",
-    receiptUrl: "https://example.com/receipt.pdf"
+  useEffect(() => {
+    const found = expenses.find(e => e.id === id);
+    if (found) {
+      setExpense(found);
+    }
+  }, [id, expenses]);
+
+  const handleDelete = () => {
+    if (window.confirm("Are you sure you want to delete this expense? This will restore the balance to the linked bank account.")) {
+      deleteExpense(id);
+      navigate('/expenses');
+    }
   };
 
-  return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      <button 
-        onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors font-bold text-sm"
-      >
-        <ArrowLeft size={16} /> Back to Expenses
-      </button>
+  if (!expense) return (
+    <div className="h-screen flex items-center justify-center">
+      <div className="animate-pulse flex flex-col items-center gap-4">
+        <div className="w-12 h-12 bg-secondary rounded-full" />
+        <p className="text-muted-foreground font-bold">Loading transaction details...</p>
+      </div>
+    </div>
+  );
 
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{expense.title}</h1>
-            <StatusBadge label={expense.status} variant="success" />
-          </div>
-          <p className="text-slate-500 font-medium">Transaction ID: EXP-{id?.toUpperCase()}</p>
-        </div>
-        <div className="flex gap-2 w-full md:w-auto">
-          <Button variant="outline" className="flex-1 md:flex-none gap-2">
-            <Edit3 size={18} /> Edit
+  return (
+    <div className="p-4 lg:p-8 max-w-5xl mx-auto space-y-6">
+      {/* Top Navigation */}
+      <div className="flex items-center justify-between">
+        <button 
+          onClick={() => navigate('/expenses')}
+          className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors"
+        >
+          <ArrowLeft size={16} /> Back to Expenses
+        </button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => navigate(`/expenses/edit/${id}`)} className="gap-2">
+            <Edit3 size={16} /> Edit
           </Button>
-          <Button variant="destructive" className="flex-1 md:flex-none gap-2">
-            <Trash2 size={18} /> Delete
+          <Button variant="destructive" size="sm" onClick={handleDelete} className="gap-2">
+            <Trash2 size={16} /> Delete
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Core Details */}
-        <Card className="lg:col-span-2">
-          <CardContent className="p-8 space-y-8">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-              <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Amount</p>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{formatCurrency(expense.amount)}</p>
+        {/* Main Content */}
+        <div className="lg:col-span-2 space-y-6">
+          <Card className="p-8 border-border shadow-md overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-8">
+               <span className="px-3 py-1 rounded-full text-xs font-black uppercase bg-emerald-100 text-emerald-600 flex items-center gap-1.5">
+                <CheckCircle2 size={14} /> Reconciled
+               </span>
+            </div>
+
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
+                <Building size={32} />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Date</p>
-                <p className="text-lg font-bold text-slate-900 dark:text-white">{expense.date}</p>
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Category</p>
-                <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full text-sm font-bold">
-                  {expense.category}
-                </span>
+                <h1 className="text-3xl font-black tracking-tight">{expense.title}</h1>
+                <p className="text-muted-foreground font-medium">{expense.category} • Transaction ID: {expense.id}</p>
               </div>
             </div>
 
-            <div className="pt-8 border-t border-slate-100 dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8 pt-8 border-t border-border">
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Assigned Team</p>
-                <p className="font-bold">{expense.team}</p>
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Amount</p>
+                <p className="text-2xl font-black text-rose-500">-{formatCurrency(expense.amount)}</p>
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Added By</p>
-                <p className="font-bold">{expense.addedBy}</p>
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Date</p>
+                <p className="text-lg font-bold flex items-center gap-2">
+                  <Calendar size={18} className="text-muted-foreground" /> {expense.date}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Team</p>
+                <p className="text-lg font-bold flex items-center gap-2">
+                  <User size={18} className="text-muted-foreground" /> {expense.team}
+                </p>
               </div>
             </div>
 
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl flex items-start gap-3">
-              <ShieldCheck className="text-emerald-500 mt-0.5" size={18} />
-              <p className="text-sm text-slate-600 dark:text-slate-300">
-                This transaction has been verified against the bank statement and is cleared for the Q1 report.
+            <div className="mt-8 p-6 bg-secondary/30 rounded-2xl border border-border">
+              <h4 className="text-sm font-bold mb-2">Description</h4>
+              <p className="text-muted-foreground leading-relaxed">
+                {expense.description || "No additional notes provided for this transaction."}
               </p>
             </div>
-          </CardContent>
-        </Card>
+          </Card>
 
-        {/* Receipt Preview Sidepanel */}
-        <Card className="lg:col-span-1">
-          <CardContent className="p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-bold text-slate-900 dark:text-white">Receipt Attachment</h3>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <Download size={16} />
+          {/* Document Preview Placeholder */}
+          <Card className="p-6 border-border shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold flex items-center gap-2">
+                <FileText size={18} /> Attached Document
+              </h3>
+              <Button variant="ghost" size="sm" className="text-primary gap-2">
+                <Download size={14} /> Download
               </Button>
             </div>
-            <div className="aspect-[3/4] w-full bg-slate-100 dark:bg-slate-800 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center text-center p-6 transition-all hover:border-indigo-400 group">
-              <FileText size={48} className="text-slate-300 group-hover:text-indigo-400 transition-colors mb-4" />
-              <p className="text-sm font-bold text-slate-500">receipt_aws_march.pdf</p>
-              <p className="text-xs text-slate-400 mt-1">Uploaded 2 days ago</p>
-              <Button variant="link" className="mt-4 text-indigo-600">View Fullscreen</Button>
+            <div className="aspect-video bg-secondary/50 rounded-xl border-2 border-dashed border-border flex items-center justify-center group cursor-pointer hover:bg-secondary transition-all">
+              <div className="text-center">
+                <ExternalLink className="mx-auto mb-2 text-muted-foreground group-hover:text-primary transition-colors" />
+                <p className="text-sm font-medium text-muted-foreground">Click to preview receipt.pdf</p>
+              </div>
             </div>
-          </CardContent>
-        </Card>
+          </Card>
+        </div>
+
+        {/* Audit Trail Sidebar */}
+        <div className="space-y-6">
+          <Card className="p-6 border-border shadow-sm bg-slate-900 text-white">
+            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500 mb-6 flex items-center gap-2">
+              <Clock size={14} /> Audit History
+            </h4>
+            <div className="space-y-6 relative before:absolute before:left-2 before:top-2 before:bottom-2 before:w-px before:bg-slate-800">
+              <div className="relative pl-8">
+                <div className="absolute left-0 top-1 w-4 h-4 bg-primary rounded-full border-4 border-slate-900" />
+                <p className="text-xs font-bold">Transaction Created</p>
+                <p className="text-[10px] text-slate-500 font-medium">By Admin • May 07, 2026</p>
+              </div>
+              <div className="relative pl-8">
+                <div className="absolute left-0 top-1 w-4 h-4 bg-emerald-500 rounded-full border-4 border-slate-900" />
+                <p className="text-xs font-bold">Funds Deducted</p>
+                <p className="text-[10px] text-slate-500 font-medium">From SVB Operating • May 07, 2026</p>
+              </div>
+              <div className="relative pl-8">
+                <div className="absolute left-0 top-1 w-4 h-4 bg-slate-700 rounded-full border-4 border-slate-900" />
+                <p className="text-xs font-bold">Receipt Attached</p>
+                <p className="text-[10px] text-slate-500 font-medium">System Auto-process • May 07, 2026</p>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6 border-border shadow-sm border-l-4 border-l-amber-500">
+            <div className="flex gap-4">
+              <ShieldAlert className="text-amber-500 shrink-0" />
+              <div>
+                <h4 className="text-sm font-bold mb-1">Compliance Check</h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  This transaction matches your company's spending policy for <strong>Cloud Infrastructure</strong>. No further action required.
+                </p>
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   );
 };
 
-export default ExpenseDetail;
+export default ExpenseDetails;
