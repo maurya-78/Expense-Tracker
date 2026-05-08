@@ -1,131 +1,131 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  UserPlus, Search, Mail, Briefcase, 
-  MoreVertical, Filter, Download 
+  UserPlus, 
+  Search, 
+  Mail, 
+  Briefcase, 
+  CreditCard, 
+  Filter, 
+  MoreVertical,
+  ArrowUpRight,
+  ChevronRight,
+  Globe
 } from 'lucide-react';
 import PageHeader from '../../components/layout/PageHeader';
-import DataTable from '../../components/tables/DataTable';
 import { Button } from '../../components/ui/button';
-import { Input } from '../../components/ui/input';
-import { Badge } from '../../components/ui/badge';
-import { formatCurrency } from '../../lib/utils';
+import { Card } from '../../components/ui/card';
+import { formatCurrency, cn } from '../../lib/utils';
+import { useNavigate } from 'react-router-dom';
 
-const MOCK_EMPLOYEES = [
-  { id: 1, name: 'Alex Rivera', role: 'Senior Engineer', team: 'Engineering', salary: 125000, status: 'Active', email: 'alex@startup.io' },
-  { id: 2, name: 'Sarah Chen', role: 'Product Manager', team: 'Product', salary: 110000, status: 'Active', email: 'sarah@startup.io' },
-  { id: 3, name: 'Mike Johnson', role: 'Growth Lead', team: 'Marketing', salary: 95000, status: 'On Leave', email: 'mike@startup.io' },
-  { id: 4, name: 'Elena Rodriguez', role: 'Finance Analyst', team: 'Finance', salary: 85000, status: 'Active', email: 'elena@startup.io' },
+const mockEmployees = [
+  { id: 1, name: 'Alice Johnson', role: 'Senior Engineer', team: 'Engineering', salary: 12500, type: 'Full-time', email: 'alice@startup.com', status: 'Active' },
+  { id: 2, name: 'Marcus Miller', role: 'Marketing Lead', team: 'Growth', salary: 9800, type: 'Full-time', email: 'marcus@startup.com', status: 'Active' },
+  { id: 3, name: 'Sarah Chen', role: 'UI Architect', team: 'Design', salary: 11000, type: 'Contract', email: 'sarah@startup.com', status: 'Active' },
+  { id: 4, name: 'James Wilson', role: 'DevOps Specialist', team: 'Engineering', salary: 13200, type: 'Full-time', email: 'james@startup.com', status: 'On Leave' },
 ];
 
 const EmployeeList = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+  const [search, setSearch] = useState('');
 
-  const columns = [
-    {
-      header: "Employee",
-      cell: (row) => (
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-xs">
-            {row.name.split(' ').map(n => n[0]).join('')}
-          </div>
-          <div>
-            <p className="font-bold text-slate-900 dark:text-white">{row.name}</p>
-            <p className="text-xs text-slate-500">{row.email}</p>
-          </div>
-        </div>
-      )
-    },
-    {
-      header: "Role & Team",
-      cell: (row) => (
-        <div className="space-y-1">
-          <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{row.role}</p>
-          <p className="text-xs text-indigo-600 dark:text-indigo-400 font-semibold">{row.team}</p>
-        </div>
-      )
-    },
-    {
-      header: "Salary",
-      cell: (row) => (
-        <span className="font-mono font-semibold">
-          {formatCurrency(row.salary)}
-          <span className="text-[10px] text-slate-400 ml-1">/yr</span>
-        </span>
-      )
-    },
-    {
-      header: "Status",
-      cell: (row) => (
-        <Badge variant={row.status === 'Active' ? 'success' : 'secondary'}>
-          {row.status}
-        </Badge>
-      )
-    },
-    {
-      header: "",
-      cell: () => (
-        <Button variant="ghost" size="icon">
-          <MoreVertical size={16} className="text-slate-400" />
-        </Button>
-      )
-    }
-  ];
+  const filteredEmployees = mockEmployees.filter(emp => 
+    emp.name.toLowerCase().includes(search.toLowerCase()) || 
+    emp.team.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
-    <div className="space-y-6">
+    <div className="p-4 lg:p-8 max-w-[1600px] mx-auto space-y-8">
       <PageHeader 
-        title="Employees" 
-        subtitle="Manage your workforce, team assignments, and payroll."
+        title="Team Directory" 
+        subtitle="Manage personnel, payroll distribution, and role assignments"
         action={
-          <Button className="gap-2">
-            <UserPlus size={20} /> Add Employee
+          <Button onClick={() => navigate('/employees/add')} className="gap-2 shadow-lg shadow-primary/20">
+            <UserPlus size={18} /> Add Employee
           </Button>
         }
       />
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
-          <p className="text-sm text-slate-500 font-medium">Total Headcount</p>
-          <h3 className="text-3xl font-bold mt-1">24</h3>
-          <p className="text-xs text-emerald-500 font-bold mt-2">+2 from last month</p>
-        </div>
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
-          <p className="text-sm text-slate-500 font-medium">Monthly Payroll</p>
-          <h3 className="text-3xl font-bold mt-1">{formatCurrency(185000)}</h3>
-          <p className="text-xs text-slate-400 font-bold mt-2">Next pay date: May 30</p>
-        </div>
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
-          <p className="text-sm text-slate-500 font-medium">Avg. Salary</p>
-          <h3 className="text-3xl font-bold mt-1">{formatCurrency(92000)}</h3>
-          <p className="text-xs text-indigo-500 font-bold mt-2">Within market range</p>
-        </div>
-      </div>
-
-      {/* Controls */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="relative w-full md:w-96">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <Input 
-            className="pl-10 h-11" 
-            placeholder="Search by name, role, or team..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+      {/* Filter & Search Bar */}
+      <div className="flex flex-col md:flex-row gap-4 items-center">
+        <div className="relative flex-1 w-full">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
+          <input 
+            type="text"
+            placeholder="Search by name, role, or department..."
+            className="w-full pl-12 pr-4 py-3 bg-card border border-border rounded-2xl focus:ring-2 focus:ring-primary/20 outline-none transition-all shadow-sm"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
         <div className="flex gap-2 w-full md:w-auto">
-          <Button variant="outline" className="gap-2 h-11 px-4">
+          <Button variant="outline" className="flex-1 md:flex-none gap-2 rounded-xl">
             <Filter size={18} /> Filters
           </Button>
-          <Button variant="outline" className="h-11 px-4">
-            <Download size={18} />
+          <Button variant="outline" className="flex-1 md:flex-none gap-2 rounded-xl">
+            <Globe size={18} /> Export
           </Button>
         </div>
       </div>
 
-      {/* Employee Table */}
-      <DataTable columns={columns} data={MOCK_EMPLOYEES} />
+      {/* Employee Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+        {filteredEmployees.map((emp, idx) => (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: idx * 0.05 }}
+            key={emp.id}
+          >
+            <Card 
+              className="group p-0 border-border hover:border-primary/40 transition-all cursor-pointer overflow-hidden shadow-sm hover:shadow-xl"
+              onClick={() => navigate(`/employees/${emp.id}`)}
+            >
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-6">
+                  <div className="w-14 h-14 bg-gradient-to-br from-primary to-blue-600 rounded-2xl flex items-center justify-center text-white text-xl font-black shadow-inner">
+                    {emp.name.split(' ').map(n => n[0]).join('')}
+                  </div>
+                  <button className="p-1 hover:bg-secondary rounded-lg transition-colors">
+                    <MoreVertical size={18} className="text-muted-foreground" />
+                  </button>
+                </div>
+
+                <div className="space-y-1 mb-6">
+                  <h3 className="text-lg font-black tracking-tight group-hover:text-primary transition-colors">{emp.name}</h3>
+                  <p className="text-sm font-medium text-muted-foreground flex items-center gap-1.5">
+                    <Briefcase size={14} /> {emp.role}
+                  </p>
+                </div>
+
+                <div className="space-y-3 py-4 border-y border-border/50">
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-muted-foreground font-medium">Department</span>
+                    <span className="font-bold px-2.5 py-0.5 bg-secondary rounded-lg text-[11px] uppercase">{emp.team}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-muted-foreground font-medium">Monthly Cost</span>
+                    <span className="font-black text-primary">{formatCurrency(emp.salary)}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="px-6 py-4 bg-secondary/30 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className={cn(
+                    "w-2 h-2 rounded-full",
+                    emp.status === 'Active' ? "bg-emerald-500 animate-pulse" : "bg-amber-500"
+                  )} />
+                  <span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">
+                    {emp.status}
+                  </span>
+                </div>
+                <ChevronRight size={16} className="text-muted-foreground group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 };
