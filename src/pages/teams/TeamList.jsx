@@ -1,103 +1,156 @@
 import React, { useState } from 'react';
-import { Plus, Search, Users, DollarSign, ArrowUpRight } from 'lucide-react';
-import PageHeader from '../../components/layout/PageHeader';
-import TeamForm from '../../components/forms/TeamForm';
-import BaseModal from '../../components/modals/BaseModal';
-import { Card, CardContent } from '../../components/ui/card';
-import { formatCurrency } from '../../lib/utils';
 import { motion } from 'framer-motion';
-
-const MOCK_TEAMS = [
-  { id: '1', name: 'Engineering', members: 12, budget: 50000, spent: 32500, lead: 'Alex Rivera' },
-  { id: '2', name: 'Marketing', members: 5, budget: 15000, spent: 14200, lead: 'Sarah Chen' },
-  { id: '3', name: 'Product', members: 4, budget: 20000, spent: 8000, lead: 'Mike Johnson' },
-  { id: '4', name: 'Growth', members: 3, budget: 10000, spent: 11500, lead: 'Elena Rodriguez' },
-];
+import { 
+  Users, 
+  Plus, 
+  Search, 
+  TrendingUp, 
+  MoreVertical, 
+  ChevronRight, 
+  Target,
+  AlertCircle
+} from 'lucide-react';
+import PageHeader from '../../components/layout/PageHeader';
+import { Button } from '../../components/ui/button';
+import { Card } from '../../components/ui/card';
+import { useTeamStore } from '../../store/useTeamStore';
+import { formatCurrency, cn } from '../../lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 const TeamList = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const { teams } = useTeamStore();
+  const [search, setSearch] = useState('');
+
+  const filteredTeams = teams.filter(t => 
+    t.name.toLowerCase().includes(search.toLowerCase()) || 
+    t.lead.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
-    <div className="space-y-6">
+    <div className="p-4 lg:p-8 max-w-[1600px] mx-auto space-y-8">
       <PageHeader 
-        title="Teams" 
-        subtitle="Manage department budgets and organizational structure."
+        title="Departments" 
+        subtitle="Manage organizational structure and departmental capital allocation"
         action={
-          <button 
-            onClick={() => setModalOpen(true)}
-            className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-500/20"
-          >
-            <Plus size={20} /> Create Team
-          </button>
+          <Button onClick={() => navigate('/teams/create')} className="gap-2">
+            <Plus size={18} /> Create Team
+          </Button>
         }
       />
 
-      {/* Team Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {MOCK_TEAMS.map((team, idx) => {
-          const usagePercent = (team.spent / team.budget) * 100;
-          const isOverBudget = team.spent > team.budget;
+      {/* Analytics Overview Bar */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="p-6 border-border bg-primary/5 border-primary/20 flex items-center gap-4">
+          <div className="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20">
+            <Users size={24} />
+          </div>
+          <div>
+            <p className="text-xs font-black uppercase text-primary tracking-widest">Total Headcount</p>
+            <p className="text-2xl font-black">{teams.reduce((a, b) => a + b.members, 0)} Members</p>
+          </div>
+        </Card>
+        
+        <Card className="p-6 border-border flex items-center gap-4">
+          <div className="w-12 h-12 bg-secondary rounded-2xl flex items-center justify-center">
+            <Target size={24} className="text-muted-foreground" />
+          </div>
+          <div>
+            <p className="text-xs font-black uppercase text-muted-foreground tracking-widest">Global Budget</p>
+            <p className="text-2xl font-black">{formatCurrency(teams.reduce((a, b) => a + b.budget, 0))}</p>
+          </div>
+        </Card>
+
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
+          <input 
+            type="text"
+            placeholder="Search teams or leads..."
+            className="w-full h-full pl-12 pr-4 bg-card border border-border rounded-2xl focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* Teams Grid */}
+      <div className="grid grid-cols-1 gap-4">
+        {filteredTeams.map((team, idx) => {
+          const usagePercent = (team.spending / team.budget) * 100;
+          const isOverBudget = usagePercent > 100;
 
           return (
             <motion.div
-              key={team.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
+              transition={{ delay: idx * 0.05 }}
+              key={team.id}
             >
-              <Card className="hover:shadow-md transition-shadow cursor-pointer group">
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/20 transition-colors">
-                      <Users className="text-slate-600 dark:text-slate-400 group-hover:text-indigo-600" size={24} />
+              <Card 
+                className="group p-6 border-border hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all cursor-pointer"
+                onClick={() => navigate(`/teams/${team.id}`)}
+              >
+                <div className="flex flex-col lg:flex-row lg:items-center gap-8">
+                  {/* Team Info */}
+                  <div className="flex-1 min-w-[240px]">
+                    <div className="flex items-center gap-3 mb-1">
+                      <h3 className="text-xl font-black tracking-tight group-hover:text-primary transition-colors">{team.name}</h3>
+                      {isOverBudget && (
+                        <span className="flex items-center gap-1 text-[10px] font-black bg-rose-500 text-white px-2 py-0.5 rounded-full uppercase">
+                          <AlertCircle size={10} /> Over Budget
+                        </span>
+                      )}
                     </div>
-                    <ArrowUpRight className="text-slate-300 group-hover:text-indigo-600" size={20} />
+                    <p className="text-sm font-medium text-muted-foreground">Managed by <span className="text-foreground">{team.lead}</span></p>
                   </div>
 
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">{team.name}</h3>
-                  <p className="text-sm text-slate-500 mb-6">Lead: {team.lead}</p>
-
-                  <div className="space-y-4">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-500">Monthly Spend</span>
-                      <span className="font-bold text-slate-900 dark:text-white">
-                        {formatCurrency(team.spent)}
+                  {/* Budget Visualization */}
+                  <div className="flex-[2] space-y-2">
+                    <div className="flex justify-between items-end">
+                      <span className="text-xs font-black uppercase text-muted-foreground tracking-widest">Budget Utilization</span>
+                      <span className={cn(
+                        "text-sm font-black",
+                        isOverBudget ? "text-rose-500" : "text-primary"
+                      )}>
+                        {usagePercent.toFixed(1)}%
                       </span>
                     </div>
-
-                    {/* Budget Progress Bar */}
-                    <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full rounded-full transition-all duration-1000 ${
-                          isOverBudget ? 'bg-rose-500' : usagePercent > 80 ? 'bg-amber-500' : 'bg-emerald-500'
-                        }`}
-                        style={{ width: `${Math.min(usagePercent, 100)}%` }}
+                    <div className="h-3 bg-secondary rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${Math.min(usagePercent, 100)}%` }}
+                        className={cn(
+                          "h-full rounded-full transition-all duration-1000",
+                          isOverBudget ? "bg-rose-500" : "bg-primary"
+                        )}
                       />
                     </div>
+                  </div>
 
-                    <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider">
-                      <span className={isOverBudget ? 'text-rose-600' : 'text-slate-400'}>
-                        {usagePercent.toFixed(0)}% Utilized
-                      </span>
-                      <span className="text-slate-400">Limit: {formatCurrency(team.budget)}</span>
+                  {/* Stats */}
+                  <div className="flex gap-10 px-8 border-l border-border hidden xl:flex">
+                    <div>
+                      <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">Monthly Spend</p>
+                      <p className="text-lg font-black">{formatCurrency(team.spending)}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">Budget</p>
+                      <p className="text-lg font-black text-muted-foreground">{formatCurrency(team.budget)}</p>
                     </div>
                   </div>
-                </CardContent>
+
+                  {/* Action */}
+                  <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10 hover:text-primary">
+                      <ChevronRight size={24} />
+                    </Button>
+                  </div>
+                </div>
               </Card>
             </motion.div>
           );
         })}
       </div>
-
-      {/* Create Team Modal */}
-      <BaseModal 
-        isOpen={isModalOpen} 
-        onClose={() => setModalOpen(false)}
-        title="Create New Team"
-        description="Define a new department and set its monthly spending limit."
-      >
-        <TeamForm onSubmit={(data) => console.log(data)} />
-      </BaseModal>
     </div>
   );
 };
