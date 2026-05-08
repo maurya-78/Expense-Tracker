@@ -1,94 +1,177 @@
-import React, { useState } from 'react';
-import { FileText, Download, Filter, Search, Calendar, CheckCircle2, Clock } from 'lucide-react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { 
+  BarChart3, 
+  PieChart, 
+  FileText, 
+  Calendar, 
+  ArrowRight, 
+  Download, 
+  TrendingUp, 
+  ShieldCheck,
+  Zap,
+  Clock
+} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
-import { Card, CardContent } from '../../components/ui/card';
+import { Card } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
-import { Input } from '../../components/ui/input';
-import StatusBadge from '../../components/common/StatusBadge';
+import { cn } from '../../lib/utils';
 
-const MOCK_REPORTS = [
-  { id: 1, name: 'Q1 Financial Summary 2026', type: 'Executive', date: '2026-03-31', status: 'Ready', size: '2.4MB' },
-  { id: 2, name: 'March Expense Audit', type: 'Compliance', date: '2026-04-05', status: 'Ready', size: '1.8MB' },
-  { id: 3, name: 'Departmental Budget Utilization', type: 'Internal', date: '2026-04-10', status: 'Processing', size: '0.5MB' },
-  { id: 4, name: 'Annual Tax Readiness 2025', type: 'Tax', date: '2026-01-15', status: 'Archived', size: '4.2MB' },
-];
+const ReportIndex = () => {
+  const navigate = useNavigate();
 
-const ReportsIndex = () => {
+  const reportModules = [
+    {
+      title: "Global Intelligence",
+      desc: "Comprehensive board-level summaries of burn rate and runway projections.",
+      path: "/reports/global",
+      icon: BarChart3,
+      color: "text-blue-500",
+      bg: "bg-blue-500/10",
+      stats: "Updated 2h ago"
+    },
+    {
+      title: "Monthly Audit",
+      desc: "Detailed month-over-month reconciliation and anomaly detection.",
+      path: "/reports/monthly",
+      icon: Calendar,
+      color: "text-purple-500",
+      bg: "bg-purple-500/10",
+      stats: "May 2026 Ready"
+    },
+    {
+      title: "Report Generator",
+      desc: "Custom builder for executive summaries and departmental deep dives.",
+      path: "/reports/generator",
+      icon: Zap,
+      color: "text-amber-500",
+      bg: "bg-amber-500/10",
+      stats: "Power Tool"
+    }
+  ];
+
   return (
-    <div className="space-y-6">
+    <div className="p-4 lg:p-8 max-w-[1600px] mx-auto space-y-10 pb-20">
       <PageHeader 
-        title="Reports" 
-        subtitle="Access and generate financial statements and audit logs."
-        action={
-          <Button className="flex items-center gap-2">
-            <Calendar size={18} /> Generate New Report
-          </Button>
-        }
+        title="Reporting Hub" 
+        subtitle="Access specialized financial intelligence modules and historical archives"
       />
 
-      {/* Filter Bar */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
-        <div className="relative w-full md:w-96">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <Input className="pl-10" placeholder="Search reports..." />
-        </div>
-        <div className="flex gap-2 w-full md:w-auto">
-          <select className="h-10 px-3 rounded-lg border dark:bg-slate-950 dark:border-slate-800 outline-none text-sm">
-            <option>All Types</option>
-            <option>Executive</option>
-            <option>Compliance</option>
-            <option>Tax</option>
-          </select>
-          <Button variant="outline" className="flex items-center gap-2">
-            <Filter size={18} /> More Filters
-          </Button>
-        </div>
+      {/* Featured Intelligence Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {reportModules.map((module, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+          >
+            <Card 
+              className="group p-8 h-full border-border hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 transition-all cursor-pointer flex flex-col justify-between"
+              onClick={() => navigate(module.path)}
+            >
+              <div>
+                <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110", module.bg, module.color)}>
+                  <module.icon size={28} />
+                </div>
+                <h3 className="text-xl font-black mb-3 group-hover:text-primary transition-colors">{module.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed font-medium mb-6">
+                  {module.desc}
+                </p>
+              </div>
+              
+              <div className="flex items-center justify-between pt-6 border-t border-border/50">
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+                  <Clock size={12} /> {module.stats}
+                </span>
+                <ArrowRight size={20} className="text-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all" />
+              </div>
+            </Card>
+          </motion.div>
+        ))}
       </div>
 
-      {/* Reports Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
-        {MOCK_REPORTS.map((report) => (
-          <Card key={report.id} className="hover:border-indigo-300 dark:hover:border-indigo-900 transition-colors">
-            <CardContent className="p-4 flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4 w-full md:w-auto">
-                <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl text-slate-600 dark:text-slate-400">
-                  <FileText size={24} />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 dark:text-white">{report.name}</h4>
-                  <div className="flex items-center gap-3 text-xs text-slate-500 mt-1">
-                    <span className="uppercase font-bold tracking-tighter">{report.type}</span>
-                    <span>•</span>
-                    <span>{report.date}</span>
-                    <span>•</span>
-                    <span>{report.size}</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Quick Insights Section */}
+        <div className="lg:col-span-2 space-y-6">
+          <Card className="p-8 border-border shadow-sm bg-secondary/20 relative overflow-hidden">
+            <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+              <div className="space-y-2">
+                <h3 className="text-xl font-black tracking-tight">Need a board deck fast?</h3>
+                <p className="text-sm text-muted-foreground font-medium max-w-md">
+                  Our automated generator compiles the latest burn analysis, runway data, and team spending into a professionally formatted PDF.
+                </p>
+              </div>
+              <Button onClick={() => navigate('/reports/generator')} className="gap-2 px-8 py-6 rounded-2xl font-black shadow-xl shadow-primary/20 shrink-0">
+                Launch Generator <Zap size={18} fill="currentColor" />
+              </Button>
+            </div>
+            {/* Visual Flare */}
+            <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+          </Card>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="p-6 border-border shadow-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <TrendingUp size={20} className="text-emerald-500" />
+                <h4 className="font-bold text-sm">Key Trend</h4>
+              </div>
+              <p className="text-sm text-muted-foreground font-medium leading-relaxed">
+                Operating efficiency has improved by <span className="text-foreground font-bold">12.4%</span> this quarter following the SaaS consolidation project.
+              </p>
+            </Card>
+
+            <Card className="p-6 border-border shadow-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <ShieldCheck size={20} className="text-primary" />
+                <h4 className="font-bold text-sm">Compliance Status</h4>
+              </div>
+              <p className="text-sm text-muted-foreground font-medium leading-relaxed">
+                All May transactions have been reconciled and digitally signed. Audit logs are ready for the upcoming Q2 review.
+              </p>
+            </Card>
+          </div>
+        </div>
+
+        {/* Historical Archives Sidebar */}
+        <Card className="p-0 border-border shadow-md overflow-hidden flex flex-col">
+          <div className="p-6 border-b border-border bg-card flex justify-between items-center">
+            <h3 className="font-black text-sm uppercase tracking-widest flex items-center gap-2">
+              <FileText size={16} className="text-primary" /> Archives
+            </h3>
+            <span className="text-[10px] font-black text-muted-foreground bg-secondary px-2 py-0.5 rounded">2026</span>
+          </div>
+          <div className="p-4 flex-1 divide-y divide-border/50">
+            {[
+              { name: 'April_Performance_Report', date: 'May 02', type: 'PDF' },
+              { name: 'Q1_Financial_Board_Deck', date: 'Apr 05', type: 'PPTX' },
+              { name: 'Personnel_Tax_Docs_2025', date: 'Mar 15', type: 'ZIP' },
+              { name: 'Infrastructure_Spend_Audit', date: 'Feb 20', type: 'CSV' },
+            ].map((file, i) => (
+              <div key={i} className="py-4 flex items-center justify-between group cursor-pointer">
+                <div className="flex items-center gap-3 overflow-hidden">
+                  <div className="p-2 bg-secondary/50 rounded-lg group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                    <FileText size={16} />
+                  </div>
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-bold truncate group-hover:text-primary transition-colors">{file.name}</p>
+                    <p className="text-[10px] text-muted-foreground font-bold">{file.date} • {file.type}</p>
                   </div>
                 </div>
-              </div>
-
-              <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
-                <div className="flex items-center gap-2">
-                  {report.status === 'Processing' ? (
-                    <span className="flex items-center gap-1 text-xs font-bold text-amber-600 animate-pulse">
-                      <Clock size={14} /> Processing
-                    </span>
-                  ) : (
-                    <StatusBadge 
-                      label={report.status} 
-                      variant={report.status === 'Ready' ? 'success' : 'neutral'} 
-                    />
-                  )}
-                </div>
-                <Button variant="ghost" size="sm" className="text-indigo-600 font-bold" disabled={report.status === 'Processing'}>
-                  <Download size={18} className="mr-2" /> Download
+                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Download size={14} />
                 </Button>
               </div>
-            </CardContent>
-          </Card>
-        ))}
+            ))}
+          </div>
+          <Button variant="ghost" className="w-full py-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground hover:text-primary border-t border-border rounded-none">
+            View Full Archives
+          </Button>
+        </Card>
       </div>
     </div>
   );
 };
 
-export default ReportsIndex;
+export default ReportIndex;
