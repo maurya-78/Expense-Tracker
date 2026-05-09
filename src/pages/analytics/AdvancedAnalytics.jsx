@@ -1,154 +1,197 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { 
   BarChart3, 
-  PieChart as PieChartIcon, 
-  TrendingDown, 
-  Download, 
-  Calendar,
-  Filter
+  TrendingUp, 
+  Zap, 
+  Activity, 
+  ArrowUpRight, 
+  ArrowDownRight,
+  Filter,
+  Maximize2,
+  RefreshCcw,
+  Target,
+  BrainCircuit,
+  Scaling
 } from 'lucide-react';
 import PageHeader from '../../components/layout/PageHeader';
-import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
+import { Card } from '../../components/ui/card';
 import { 
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  AreaChart, Area, BarChart, Bar, Legend 
+  ComposedChart,
+  Line,
+  Area,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  ScatterChart,
+  Scatter,
+  ZAxis
 } from 'recharts';
+import { formatCurrency, cn } from '../../lib/utils';
 
-const MOCK_BURN_DATA = [
-  { month: 'Jan', projected: 45000, actual: 42000 },
-  { month: 'Feb', projected: 45000, actual: 48000 },
-  { month: 'Mar', projected: 50000, actual: 49000 },
-  { month: 'Apr', projected: 50000, actual: 62000 }, // Variance alert
-  { month: 'May', projected: 55000, actual: 54000 },
-];
+const AdvanceAnalytics = () => {
+  const [isSimulating, setIsSimulating] = useState(false);
 
-const AdvancedAnalytics = () => {
-  const [timeRange, setTimeRange] = useState('6m');
+  // Advanced data: Correlation between Headcount and Infrastructure Spend
+  const correlationData = [
+    { x: 10, y: 2500, z: 200, name: 'Jan' },
+    { x: 12, y: 3000, z: 240, name: 'Feb' },
+    { x: 15, y: 5200, z: 300, name: 'Mar' }, // Spike in spend per head
+    { x: 17, y: 4800, z: 340, name: 'Apr' },
+    { x: 20, y: 5900, z: 400, name: 'May' },
+  ];
+
+  const velocityData = [
+    { month: 'Jan', velocity: 1200, acceleration: 2 },
+    { month: 'Feb', velocity: 1400, acceleration: 5 },
+    { month: 'Mar', velocity: 2100, acceleration: 15 },
+    { month: 'Apr', velocity: 1800, acceleration: -8 },
+    { month: 'May', velocity: 1700, acceleration: -2 },
+  ];
 
   return (
-    <div className="space-y-6">
+    <div className="p-4 lg:p-8 max-w-[1600px] mx-auto space-y-8 pb-20">
       <PageHeader 
         title="Advanced Analytics" 
-        subtitle="Deep dive into spending patterns and financial forecasting."
+        subtitle="Multi-dimensional financial modeling and capital velocity tracking"
         action={
-          <div className="flex gap-2">
-            <Button variant="outline" className="gap-2">
-              <Calendar size={18} /> {timeRange === '6m' ? 'Last 6 Months' : 'Year to Date'}
-            </Button>
-            <Button className="gap-2">
-              <Download size={18} /> Export Data
-            </Button>
-          </div>
+          <Button 
+            onClick={() => {
+                setIsSimulating(true);
+                setTimeout(() => setIsSimulating(false), 2000);
+            }}
+            className="gap-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl"
+          >
+            {isSimulating ? <RefreshCcw className="animate-spin" size={18} /> : <BrainCircuit size={18} />}
+            Run Simulation
+          </Button>
         }
       />
 
-      {/* Forecasting Grid */}
+      {/* Intelligence Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3 size={20} className="text-indigo-600" />
-              Actual vs. Budgeted Burn
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="h-[400px]">
+        <Card className="p-6 border-border shadow-sm bg-primary/5 border-primary/10 relative overflow-hidden">
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="p-2 bg-primary text-white rounded-lg">
+                <Scaling size={20} />
+              </div>
+              <h4 className="text-sm font-black uppercase tracking-widest text-primary">Capital Velocity</h4>
+            </div>
+            <p className="text-3xl font-black mb-1">$4,820 <span className="text-xs text-muted-foreground font-bold">/ DAY</span></p>
+            <p className="text-xs text-muted-foreground font-medium">The speed at which your capital is being deployed into operations.</p>
+          </div>
+          <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl" />
+        </Card>
+
+        <Card className="p-6 border-border shadow-sm bg-emerald-500/5 border-emerald-500/10">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="p-2 bg-emerald-500 text-white rounded-lg">
+              <TrendingUp size={20} />
+            </div>
+            <h4 className="text-sm font-black uppercase tracking-widest text-emerald-500">Efficiency Index</h4>
+          </div>
+          <p className="text-3xl font-black mb-1">0.92 <span className="text-xs text-muted-foreground font-bold">SCORE</span></p>
+          <p className="text-xs text-muted-foreground font-medium">Measurement of output value vs. capital burned.</p>
+        </Card>
+
+        <Card className="p-6 border-border shadow-sm bg-rose-500/5 border-rose-500/10">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="p-2 bg-rose-500 text-white rounded-lg">
+              <Zap size={20} />
+            </div>
+            <h4 className="text-sm font-black uppercase tracking-widest text-rose-500">Anomaly Rating</h4>
+          </div>
+          <p className="text-3xl font-black mb-1">Low <span className="text-xs text-muted-foreground font-bold">RISK</span></p>
+          <p className="text-xs text-muted-foreground font-medium">Current variance is within 5% of projected financial models.</p>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Velocity Chart */}
+        <Card className="p-8 border-border shadow-sm">
+          <h3 className="text-lg font-black mb-2">Spending Acceleration</h3>
+          <p className="text-xs text-muted-foreground font-medium mb-8">Tracking the rate of change in your monthly burn</p>
+          <div className="h-[350px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={MOCK_BURN_DATA}>
+              <ComposedChart data={velocityData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fontSize: 12}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12}} />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                <YAxis axisLine={false} tickLine={false} />
                 <Tooltip 
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
+                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}
                 />
-                <Legend iconType="circle" />
-                <Bar dataKey="projected" fill="#cbd5e1" radius={[4, 4, 0, 0]} name="Budgeted" />
-                <Bar dataKey="actual" fill="#6366f1" radius={[4, 4, 0, 0]} name="Actual Spend" />
-              </BarChart>
+                <Area type="monotone" dataKey="velocity" fill="#3b82f6" fillOpacity={0.1} stroke="#3b82f6" strokeWidth={3} />
+                <Bar dataKey="acceleration" fill="#f43f5e" radius={[4, 4, 0, 0]} barSize={20} />
+              </ComposedChart>
             </ResponsiveContainer>
-          </CardContent>
+          </div>
         </Card>
 
-        {/* Runway Sensitivity Analysis */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-bold text-slate-500 uppercase tracking-wider">
-              Runway Sensitivity
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
-              <p className="text-xs font-bold text-slate-400 mb-2">IF BURN DECREASES 10%</p>
-              <div className="flex justify-between items-end">
-                <h3 className="text-2xl font-bold text-emerald-600">16.4 Months</h3>
-                <span className="text-xs font-medium text-emerald-500 mb-1">+2.2 months</span>
-              </div>
-            </div>
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
-              <p className="text-xs font-bold text-slate-400 mb-2">IF BURN INCREASES 10%</p>
-              <div className="flex justify-between items-end">
-                <h3 className="text-2xl font-bold text-rose-600">11.8 Months</h3>
-                <span className="text-xs font-medium text-rose-500 mb-1">-2.4 months</span>
-              </div>
-            </div>
-            <div className="pt-4">
-              <p className="text-xs text-slate-500 italic">
-                *Sensitivity is calculated based on current cash balance and trailing 3-month average burn.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Category Breakdown & Trend */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Spending Velocity</CardTitle>
-          </CardHeader>
-          <CardContent className="h-[300px]">
+        {/* Correlation Chart */}
+        <Card className="p-8 border-border shadow-sm">
+          <h3 className="text-lg font-black mb-2">Headcount Correlation</h3>
+          <p className="text-xs text-muted-foreground font-medium mb-8">Relationship between team size (X) and infra-spend (Y)</p>
+          <div className="h-[350px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={MOCK_BURN_DATA}>
-                <defs>
-                  <linearGradient id="colorBurn" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
+              <ScatterChart>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                <XAxis dataKey="month" hide />
-                <Tooltip />
-                <Area type="monotone" dataKey="actual" stroke="#6366f1" strokeWidth={3} fillOpacity={1} fill="url(#colorBurn)" />
-              </AreaChart>
+                <XAxis type="number" dataKey="x" name="Team Size" unit=" ppl" axisLine={false} tickLine={false} />
+                <YAxis type="number" dataKey="y" name="Spend" unit="$" axisLine={false} tickLine={false} />
+                <ZAxis type="number" dataKey="z" range={[60, 400]} name="Volume" />
+                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                <Scatter name="Teams" data={correlationData} fill="#8b5cf6" />
+              </ScatterChart>
             </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Efficiency Insights</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-             {[
-               { label: 'Engineering Cost per Head', value: '$10.4k', change: '+2%', type: 'neutral' },
-               { label: 'Marketing ROI (Est)', value: '3.2x', change: '+0.4x', type: 'positive' },
-               { label: 'SaaS Tool Bloat', value: '14 Tools', change: '-2', type: 'positive' },
-             ].map((insight, idx) => (
-               <div key={idx} className="flex justify-between items-center p-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors rounded-lg">
-                 <span className="text-sm font-medium text-slate-600 dark:text-slate-400">{insight.label}</span>
-                 <div className="text-right">
-                   <p className="font-bold">{insight.value}</p>
-                   <p className={`text-[10px] font-bold ${insight.type === 'positive' ? 'text-emerald-500' : 'text-slate-400'}`}>
-                     {insight.change}
-                   </p>
-                 </div>
-               </div>
-             ))}
-          </CardContent>
+          </div>
         </Card>
       </div>
+
+      {/* Predictive Models Table */}
+      <Card className="overflow-hidden border-border shadow-sm">
+        <div className="p-6 border-b border-border bg-secondary/20">
+          <h3 className="font-black text-sm uppercase tracking-widest">Growth Scenario Simulations</h3>
+        </div>
+        <div className="overflow-x-auto">
+            <table className="w-full text-left">
+                <thead className="bg-card border-b border-border text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                    <tr>
+                        <th className="px-6 py-4">Scenario</th>
+                        <th className="px-6 py-4">Projected Burn</th>
+                        <th className="px-6 py-4">Runway Impact</th>
+                        <th className="px-6 py-4">Risk Level</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                    {[
+                        { s: 'Aggressive Hiring (+5/mo)', b: '$85,000', r: '-4.2 Months', risk: 'High', color: 'text-rose-500' },
+                        { s: 'Infrastructure Optimization', b: '$42,000', r: '+1.8 Months', risk: 'Low', color: 'text-emerald-500' },
+                        { s: 'Current Trajectory', b: '$51,200', r: 'Stable', risk: 'Medium', color: 'text-amber-500' },
+                    ].map((row, i) => (
+                        <tr key={i} className="hover:bg-secondary/30 transition-colors cursor-default font-bold text-sm">
+                            <td className="px-6 py-4">{row.s}</td>
+                            <td className="px-6 py-4">{row.b}</td>
+                            <td className={cn("px-6 py-4", row.color)}>{row.r}</td>
+                            <td className="px-6 py-4">
+                                <span className={cn("px-2 py-1 rounded-lg text-[10px] uppercase", 
+                                    row.risk === 'High' ? "bg-rose-100 text-rose-600" : 
+                                    row.risk === 'Low' ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600")}>
+                                    {row.risk}
+                                </span>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+      </Card>
     </div>
   );
 };
 
-export default AdvancedAnalytics;
+export default AdvanceAnalytics;
