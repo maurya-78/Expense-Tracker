@@ -1,63 +1,104 @@
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 
 // Layouts
 import DashboardLayout from '../layouts/DashboardLayout';
-import AuthLayout from '../layouts/AuthLayout';
+import AuthGuard from './AuthGuard';
+import PublicRoute from './PublicRoute';
 
-// Auth Pages
-import Login from '../pages/auth/Login';
-import Register from '../pages/auth/Register';
+// Lazy Loading Pages for Performance
+const Login = lazy(() => import('../pages/auth/LoginPage'));
+const Register = lazy(() => import('../pages/auth/Register'));
+const ForgotPassword = lazy(() => import('../pages/auth/ForgotPassword'));
+const ResetPassword = lazy(() => import('../pages/auth/ResetPassword'));
 
-// Dashboard Pages
-import Dashboard from '../pages/dashboard/Dashboard';
-import ExpenseList from '../pages/expenses/ExpenseList';
-import TeamList from '../pages/teams/TeamList';
-import EmployeeList from '../pages/employees/EmployeeList';
-import AdvancedAnalytics from '../pages/analytics/AdvancedAnalytics';
-import MonthlyReports from '../pages/reports/MonthlyReports';
-import ProfileSettings from '../pages/settings/Profile';
+const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
+const ExpenseList = lazy(() => import('../pages/expenses/ExpenseList'));
+const AddExpense = lazy(() => import('../pages/expenses/AddExpense'));
+const ExpenseDetails = lazy(() => import('../pages/expenses/ExpenseDetails'));
 
-// Guards
-import PrivateRoute from './PrivateRoute';
-import RoleRoute from './RoleRoute';
+const TeamList = lazy(() => import('../pages/teams/TeamList'));
+const TeamDetails = lazy(() => import('../pages/teams/TeamDetails'));
+const CreateTeam = lazy(() => import('../pages/teams/CreateTeam'));
+
+const EmployeeList = lazy(() => import('../pages/employees/EmployeeList'));
+const AddEmployee = lazy(() => import('../pages/employees/AddEmployee'));
+const EmployeeProfile = lazy(() => import('../pages/employees/EmployeeProfile'));
+
+const ReportIndex = lazy(() => import('../pages/reports/ReportIndex'));
+const MonthlyReports = lazy(() => import('../pages/reports/MonthlyReports'));
+
+const FinancialAnalytics = lazy(() => import('../pages/analytics/FinancialAnalytics'));
+const AdvanceAnalytics = lazy(() => import('../pages/analytics/AdvanceAnalytics'));
+
+const Settings = lazy(() => import('../pages/settings/Settings'));
+const Onboarding = lazy(() => import('../pages/onboarding/OnboardingFlow'));
+
+// Loading Fallback
+const PageLoader = () => (
+  <div className="h-screen w-full flex items-center justify-center bg-background">
+    <Loader2 className="animate-spin text-primary" size={32} />
+  </div>
+);
 
 const AppRoutes = () => {
   return (
-    <Routes>
-      {/* Public Auth Routes */}
-      <Route element={<AuthLayout />}>
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-      </Route>
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
+        {/* Public Auth Routes */}
+        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+        <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
+        <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
 
-      {/* Protected SaaS Routes */}
-      <Route element={<PrivateRoute />}>
-        <Route path="/" element={<DashboardLayout />}>
-          {/* 
-            'index' makes this the default view when on "/". 
-            Matches Sidebar path: "/" 
-          */}
+        {/* Onboarding (Protected) */}
+        <Route path="/onboarding" element={<AuthGuard><Onboarding /></AuthGuard>} />
+
+        {/* Dashboard Layout (Protected) */}
+        <Route path="/" element={<AuthGuard><DashboardLayout /></AuthGuard>}>
           <Route index element={<Dashboard />} />
           
-          {/* General Access Pages */}
-          <Route path="expenses" element={<ExpenseList />} />
-          {/* Matches Sidebar path: "/settings" */}
-          <Route path="settings" element={<ProfileSettings />} />
-          <Route path="profile" element={<ProfileSettings />} />
-
-          {/* Admin/Founder Only Pages */}
-          <Route element={<RoleRoute allowedRoles={['founder', 'finance_manager']} />}>
-            <Route path="teams" element={<TeamList />} />
-            <Route path="employees" element={<EmployeeList />} />
-            <Route path="analytics" element={<AdvancedAnalytics />} />
-            <Route path="reports" element={<MonthlyReports />} />
+          {/* Expense Module */}
+          <Route path="expenses">
+            <Route index element={<ExpenseList />} />
+            <Route path="add" element={<AddExpense />} />
+            <Route path=":id" element={<ExpenseDetails />} />
+            <Route path="edit/:id" element={<AddExpense />} />
           </Route>
-        </Route>
-      </Route>
 
-      {/* Global Fallback: If user hits a weird URL, send them to the root */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+          {/* Team Module */}
+          <Route path="teams">
+            <Route index element={<TeamList />} />
+            <Route path="create" element={<CreateTeam />} />
+            <Route path=":id" element={<TeamDetails />} />
+          </Route>
+
+          {/* Employee Module */}
+          <Route path="employees">
+            <Route index element={<EmployeeList />} />
+            <Route path="add" element={<AddEmployee />} />
+            <Route path=":id" element={<EmployeeProfile />} />
+          </Route>
+
+          {/* Analytics & Reports */}
+          <Route path="analytics">
+            <Route index element={<FinancialAnalytics />} />
+            <Route path="advanced" element={<AdvanceAnalytics />} />
+          </Route>
+          
+          <Route path="reports">
+            <Route index element={<ReportIndex />} />
+            <Route path="monthly" element={<MonthlyReports />} />
+          </Route>
+
+          <Route path="settings" element={<Settings />} />
+        </Route>
+
+        {/* 404 Redirect */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Suspense>
   );
 };
 
