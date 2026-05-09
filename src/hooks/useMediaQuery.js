@@ -15,6 +15,3 @@ export const useMediaQuery = (query) => {
 
   return matches;
 };
-
-// Usage Example: 
-// const isMobile = useMediaQuery('(max-width: 768px)');
