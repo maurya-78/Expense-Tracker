@@ -1,41 +1,26 @@
-import api from '../lib/axios';
+import api from './api';
 
-const expenseService = {
-  getAll: async (params) => {
-    // params: { page, limit, category, teamId, search }
-    const response = await api.get('/expenses', { params });
-    return response.data;
+export const expenseService = {
+  // Fetch paginated expenses with dynamic filters (date range, category, status)
+  getExpenses: async (filters = {}) => {
+    const { data } = await api.get('/expenses', { params: filters });
+    return data;
   },
 
-  getById: async (id) => {
-    const response = await api.get(`/expenses/${id}`);
-    return response.data;
+  // Record a new transaction
+  createExpense: async (expenseData) => {
+    const { data } = await api.post('/expenses', expenseData);
+    return data;
   },
 
-  create: async (expenseData) => {
-    // If expenseData contains a File, use FormData
-    const response = await api.post('/expenses', expenseData);
-    return response.data;
+  // Update existing expense (e.g., mark as "Paid" or "Reconciled")
+  updateExpense: async (id, update) => {
+    const { data } = await api.patch(`/expenses/${id}`, update);
+    return data;
   },
 
-  update: async (id, expenseData) => {
-    const response = await api.patch(`/expenses/${id}`, expenseData);
-    return response.data;
-  },
-
-  delete: async (id) => {
-    const response = await api.delete(`/expenses/${id}`);
-    return response.data;
-  },
-
-  uploadReceipt: async (id, file) => {
-    const formData = new FormData();
-    formData.append('receipt', file);
-    const response = await api.post(`/expenses/${id}/receipt`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
-    return response.data;
+  // Delete an expense (Admin only)
+  deleteExpense: async (id) => {
+    await api.delete(`/expenses/${id}`);
   }
 };
-
-export default expenseService;

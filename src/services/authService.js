@@ -1,26 +1,27 @@
-import api from '../lib/axios';
+import api from './api';
 
-const authService = {
+export const authService = {
+  // Authenticate user and return JWT + User profile
   login: async (credentials) => {
-    // credentials: { email, password }
-    const response = await api.post('/auth/login', credentials);
-    return response.data; // { user: {...}, token: "..." }
+    const { data } = await api.post('/auth/login', credentials);
+    return data;
   },
 
+  // Create new company workspace and admin account
   register: async (userData) => {
-    const response = await api.post('/auth/register', userData);
-    return response.data;
+    const { data } = await api.post('/auth/register', userData);
+    return data;
   },
 
+  // Verify current session and fetch latest user permissions
+  getProfile: async () => {
+    const { data } = await api.get('/auth/profile');
+    return data;
+  },
+
+  // Trigger password reset workflow
   forgotPassword: async (email) => {
-    const response = await api.post('/auth/forgot-password', { email });
-    return response.data;
-  },
-
-  resetPassword: async (token, newPassword) => {
-    const response = await api.post(`/auth/reset-password/${token}`, { password: newPassword });
-    return response.data;
+    const { data } = await api.post('/auth/forgot-password', { email });
+    return data;
   }
 };
-
-export default authService;
