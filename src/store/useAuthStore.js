@@ -8,23 +8,25 @@ export const useAuthStore = create(
       token: null,
       isAuthenticated: false,
       
-      // role: 'founder' | 'finance_manager' | 'team_lead' | 'employee'
-      login: (userData, token) => set({ 
-        user: userData, 
+      // Actions
+      setAuth: (user, token) => set({ 
+        user, 
         token, 
-        isAuthenticated: true 
+        isAuthenticated: !!token 
       }),
       
-      logout: () => {
-        // Clear sensitive data on logout
-        set({ user: null, token: null, isAuthenticated: false });
-        localStorage.removeItem('auth-storage');
-      },
-
-      updateProfile: (updates) => set((state) => ({
-        user: { ...state.user, ...updates }
+      logout: () => set({ 
+        user: null, 
+        token: null, 
+        isAuthenticated: false 
+      }),
+      
+      updateUser: (updates) => set((state) => ({
+        user: state.user ? { ...state.user, ...updates } : null
       }))
     }),
-    { name: 'auth-storage' }
+    {
+      name: 'stellar-auth-storage', // Unique key for localStorage
+    }
   )
 );
