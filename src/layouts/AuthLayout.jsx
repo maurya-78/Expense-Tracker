@@ -1,51 +1,41 @@
 import React from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
-import { motion } from 'framer-motion';
 
 const AuthLayout = () => {
   const { isAuthenticated } = useAuthStore();
 
-  // Redirect to dashboard if user is already logged in
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
-  }
+  // If already logged in, don't show login page
+  if (isAuthenticated) return <Navigate to="/dashboard" replace />;
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-white dark:bg-slate-950">
-      {/* Left Side: Branding/Visuals (Hidden on mobile) */}
-      <div className="hidden lg:flex flex-col justify-between p-12 bg-indigo-600 text-white relative overflow-hidden">
-        <div className="relative z-10">
-          <h1 className="text-3xl font-bold italic tracking-tighter">FINANCE.IO</h1>
-        </div>
+    <div className="flex min-h-screen bg-white">
+      {/* Left Side: Branding - Only visible on LG screens and up */}
+      <div className="hidden lg:flex lg:w-1/2 bg-indigo-600 p-16 flex-col justify-between relative overflow-hidden">
+        {/* Decorative Circle to prevent flat look */}
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-indigo-500 rounded-full opacity-50 blur-3xl" />
         
-        <div className="relative z-10 max-w-md">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl font-bold leading-tight"
-          >
+        <div className="relative z-10">
+          <span className="text-white font-bold text-xl tracking-tight">FINANCE.IO</span>
+        </div>
+
+        <div className="relative z-10">
+          <h2 className="text-white text-5xl font-extrabold leading-[1.1] mb-6">
             Manage your startup runway with precision.
-          </motion.h2>
-          <p className="mt-6 text-indigo-100 text-lg">
+          </h2>
+          <p className="text-indigo-100 text-lg max-w-md leading-relaxed">
             Join 2,000+ founders tracking burn rate, managing team budgets, and scaling with confidence.
           </p>
         </div>
 
-        <div className="relative z-10 flex gap-8 text-indigo-200 text-sm font-medium">
-          <span>© 2026 Startup Finance Platform</span>
-          <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+        <div className="relative z-10 text-indigo-200 text-sm">
+          © 2026 Stellar Finance Platform. All rights reserved.
         </div>
-
-        {/* Abstract Background Elements */}
-        <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-indigo-500 rounded-full blur-3xl opacity-50" />
-        <div className="absolute bottom-[-5%] left-[-5%] w-64 h-64 bg-indigo-400 rounded-full blur-2xl opacity-30" />
       </div>
 
-      {/* Right Side: Form Container */}
-      <div className="flex items-center justify-center p-6 md:p-12">
-        <div className="w-full max-w-md">
-          {/* Outlet renders the Auth form (Login/Register) */}
+      {/* Right Side: Login/Register Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-slate-50">
+        <div className="w-full max-w-md bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-slate-100">
           <Outlet />
         </div>
       </div>

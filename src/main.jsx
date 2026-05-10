@@ -1,16 +1,25 @@
-import React, { StrictMode } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 
-import './index.css';
-
-import './styles/globals.css';
-import './styles/utilities.css';
+// 1. Global Styles
+import './styles/index.css';
 import './styles/animations.css';
 
-import App from './App.jsx';
+// 2. Core Components & Providers
+import App from './App';
+import { AppProvider } from './providers/AppProvider';
 
+/**
+ * Root mounting point for the Stellar Finance Platform.
+ * StrictMode is enabled to catch side-effects during development.
+ */
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+  <React.StrictMode>
+    <BrowserRouter>
+      <AppProvider>
+        <App />
+      </AppProvider>
+    </BrowserRouter>
+  </React.StrictMode>
 );

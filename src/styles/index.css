@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+body{
+  margin:0;
+  padding:0;
+  font-family:sans-serif;
+}
+/* Add this to make the theme switch feel smooth, not jarring */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  @apply bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-50;
+}

@@ -1,54 +1,73 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
-import AppRoutes from './routes/AppRoutes';
-import { useThemeStore } from './store/useThemeStore';
+// Layouts
+import DashboardLayout from './layouts/DashboardLayout';
+import AuthLayout from './layouts/AuthLayout';
+
+// 1. Auth Pages
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+
+// 2. Dashboard & Analytics
+import Overview from './pages/dashboard/Overview';
+import Analytics from './pages/analytics/Analytics';
+
+// 3. Finance & Management
+import Transactions from './pages/expenses/Transactions'; // Assuming Transactions is here
+import Teams from './pages/teams/Teams';
+import Employees from './pages/employees/Employees';
+
+// 4. Reports & Settings
+import Reports from './pages/reports/Reports';
+import Settings from './pages/settings/Settings';
+import Onboarding from './pages/onboarding/Onboarding';
+
+// Stores
 import { useAuthStore } from './store/useAuthStore';
 
-import { Toaster } from './components/ui/toaster';
-
-/**
- * Root Application Component
- */
 function App() {
-  // Use a selector for better performance
-  const isDarkMode = useThemeStore((state) => state.isDarkMode);
-  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+  const { checkAuth, isInitializing } = useAuthStore();
 
-  /**
-   * Initialize Auth on Mount
-   */
   useEffect(() => {
-    if (initializeAuth) {
-      initializeAuth();
-    }
-  }, [initializeAuth]);
+    checkAuth();
+  }, [checkAuth]);
 
-  /**
-   * Sync Theme - Ensures the 'dark' class is present on the document root.
-   * This is redundant but helpful if the store rehydrates after the initial render.
-   */
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (isDarkMode) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-  }, [isDarkMode]);
+  if (isInitializing) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
 
   return (
-    // 'dark' class here ensures components using Tailwind's dark: variants respond correctly
-    <div className={isDarkMode ? 'dark' : ''}>
-      <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
-        <Router>
-          <AppRoutes />
-          
-          {/* Global UI Components */}
-          <Toaster />
-        </Router>
-      </div>
-    </div>
+    <Routes>
+      {/* PUBLIC ROUTES */}
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Route>
+
+      {/* ONBOARDING (Special case) */}
+      <Route path="/onboarding" element={<Onboarding />} />
+
+      {/* PROTECTED DASHBOARD ROUTES */}
+      <Route element={<DashboardLayout />}>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        
+        <Route path="/dashboard" element={<Overview />} />
+        <Route path="/expenses" element={<Transactions />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/teams" element={<Teams />} />
+        <Route path="/employees" element={<Employees />} />
+        <Route path="/reports" element={<Reports />} />
+        <Route path="/settings" element={<Settings />} />
+      </Route>
+
+      {/* CATCH-ALL */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
