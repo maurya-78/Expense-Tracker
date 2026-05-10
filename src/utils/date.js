@@ -1,30 +1,30 @@
-import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
-
 /**
- * Formats a date for the UI (e.g., Mar 24, 2026)
+ * Checks if a date falls within the current month and year.
  */
-export const formatDate = (date) => {
-  if (!date) return '-';
-  return format(new Date(date), 'MMM dd, yyyy');
-};
-
-/**
- * Returns labels for the last 6 months (for charts)
- */
-export const getLastSixMonths = () => {
-  return Array.from({ length: 6 })
-    .map((_, i) => format(subMonths(new Date(), i), 'MMM'))
-    .reverse();
-};
-
-/**
- * Checks if a date is within the current fiscal month
- */
-export const isCurrentMonth = (date) => {
+export const isCurrentMonth = (dateString) => {
+  const date = new Date(dateString);
   const now = new Date();
-  const target = new Date(date);
   return (
-    target.getMonth() === now.getMonth() && 
-    target.getFullYear() === now.getFullYear()
+    date.getMonth() === now.getMonth() && 
+    date.getFullYear() === now.getFullYear()
   );
+};
+
+/**
+ * Returns the start and end of the current month for API filtering.
+ */
+export const getCurrentMonthRange = () => {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+  const end = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString();
+  return { start, end };
+};
+
+/**
+ * Returns a relative time string (e.g., "2 days ago").
+ */
+export const getRelativeTime = (dateString) => {
+  const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+  const diff = (new Date(dateString) - new Date()) / (1000 * 60 * 60 * 24);
+  return rtf.format(Math.round(diff), 'day');
 };

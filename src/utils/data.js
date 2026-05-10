@@ -1,30 +1,28 @@
 /**
- * Formats file sizes for the UI
+ * Groups an array of objects by a specific key.
+ * Useful for grouping expenses by category or department.
  */
-export const formatFileSize = (bytes) => {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+export const groupBy = (array, key) => {
+  return array.reduce((result, currentValue) => {
+    (result[currentValue[key]] = result[currentValue[key]] || []).push(currentValue);
+    return result;
+  }, {});
 };
 
 /**
- * Simple JSON to CSV converter for report exports
+ * Sorts an array of objects by a numeric or string property.
  */
-export const convertToCSV = (objArray) => {
-  const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
-  let str = '';
-  const headers = Object.keys(array[0]).join(',');
-  str += headers + '\r\n';
+export const sortBy = (array, key, order = 'desc') => {
+  return [...array].sort((a, b) => {
+    if (a[key] < b[key]) return order === 'asc' ? -1 : 1;
+    if (a[key] > b[key]) return order === 'asc' ? 1 : -1;
+    return 0;
+  });
+};
 
-  for (let i = 0; i < array.length; i++) {
-    let line = '';
-    for (const index in array[i]) {
-      if (line !== '') line += ',';
-      line += array[i][index];
-    }
-    str += line + '\r\n';
-  }
-  return str;
+/**
+ * Sums a specific property in an array of objects.
+ */
+export const sumBy = (array, key) => {
+  return array.reduce((sum, item) => sum + (Number(item[key]) || 0), 0);
 };

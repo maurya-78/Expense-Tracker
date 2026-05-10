@@ -1,13 +1,21 @@
 /**
- * Truncates long text for table cells
+ * Capitalizes the first letter of every word.
  */
-export const truncate = (str, length = 30) => {
+export const capitalize = (str) => {
   if (!str) return '';
-  return str.length > length ? str.substring(0, length) + '...' : str;
+  return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
 /**
- * Generates initials for user avatars
+ * Truncates long strings (e.g., long descriptions in a table).
+ */
+export const truncate = (str, length = 30) => {
+  if (!str || str.length <= length) return str;
+  return str.substring(0, length) + '...';
+};
+
+/**
+ * Generates initials from a name (e.g., "Sharma Admin" -> "SA").
  */
 export const getInitials = (name) => {
   if (!name) return '??';
@@ -17,18 +25,4 @@ export const getInitials = (name) => {
     .join('')
     .toUpperCase()
     .substring(0, 2);
-};
-
-/**
- * Slugify text for URL parameters
- */
-export const slugify = (text) => {
-  return text
-    .toString()
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w-]+/g, '')
-    .replace(/--+/g, '-')
-    .replace(/^-+/, '')
-    .replace(/-+$/, '');
 };
