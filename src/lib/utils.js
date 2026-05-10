@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 /**
  * Merges Tailwind CSS classes without style conflicts.
- * Usage: cn('px-2 py-1', isError && 'bg-red-50', className)
+ * Essential for dynamic styling in your dashboard cards.
  */
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -11,25 +11,33 @@ export function cn(...inputs) {
 
 /**
  * Formats numbers into standard currency strings.
- * Defaults to USD, but can be configured for internationalization.
+ * Defaulting to INR for your local shop/startup context.
  */
-export const formatCurrency = (value, currency = 'USD', locale = 'en-US') => {
-  if (typeof value !== 'number') return '$0.00';
+export const formatCurrency = (value, currency = 'INR', locale = 'en-IN') => {
+  const numericValue = typeof value === 'string' ? parseFloat(value) : value;
   
+  if (isNaN(numericValue) || numericValue === null) {
+    return currency === 'INR' ? '₹0.00' : '$0.00';
+  }
+
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: currency,
     minimumFractionDigits: 2,
-  }).format(value);
+  }).format(numericValue);
 };
 
 /**
- * Formats dates into a readable format used in transaction lists.
- * Example: "Oct 24, 2026"
+ * Formats dates into a readable format.
+ * Example: "May 10, 2026"
  */
 export const formatDate = (dateString) => {
-  if (!dateString) return '';
+  if (!dateString) return '—';
   const date = new Date(dateString);
+  
+  // Check for invalid dates to prevent "Invalid Date" showing in UI
+  if (isNaN(date.getTime())) return '—';
+
   return new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
@@ -39,26 +47,39 @@ export const formatDate = (dateString) => {
 
 /**
  * Calculates the percentage change between two values.
- * Useful for "Burn Rate" variance indicators.
+ * Useful for "Burn Rate" variance or month-over-month growth.
  */
 export const calculatePercentageChange = (current, previous) => {
-  if (!previous) return 0;
-  return ((current - previous) / previous) * 100;
+  if (!previous || previous === 0) return 0;
+  const change = ((current - previous) / previous) * 100;
+  return parseFloat(change.toFixed(1));
 };
 
 /**
- * Truncates long strings (like transaction descriptions) for small UI elements.
+ * Truncates long strings for UI elements like table cells.
  */
-export const truncate = (str, length) => {
+export const truncate = (str, length = 20) => {
   if (!str) return '';
   return str.length > length ? `${str.substring(0, length)}...` : str;
 };
 
 /**
- * Returns a color scheme based on financial health.
+ * Returns a color scheme based on financial health (Runway).
+ * Aligned with: 12+ Healthy, 6+ Warning, <6 Critical.
  */
-export const getHealthColor = (percentage) => {
-  if (percentage > 90) return 'text-rose-500';
-  if (percentage > 75) return 'text-amber-500';
-  return 'text-emerald-500';
+export const getHealthColor = (runwayMonths) => {
+  if (runwayMonths >= 12) return 'text-emerald-500'; // Healthy
+  if (runwayMonths >= 6) return 'text-amber-500';   // Warning
+  return 'text-rose-500';                           // Critical
+};
+
+/**
+ * Formats large numbers into compact versions (e.g., 1.2L, 50K).
+ * Updated to use Indian numbering system (Lakhs/Crores).
+ */
+export const formatCompactNumber = (number, locale = 'en-IN') => {
+  return new Intl.NumberFormat(locale, {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(number || 0);
 };
