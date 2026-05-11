@@ -1,578 +1,484 @@
-# “Startup Finance Management Platform”
+# 🚀 Startup Finance Management Platform
 
-The frontend MUST be:
+A modern and intelligent financial management platform built for startups, bootstrapped founders, and small teams to track expenses, monitor burn rate, calculate runway, and manage startup finances from a centralized dashboard.
 
-* Modern
-* Attractive
-* Fully Responsive
-* Production-ready
-* Scalable
-* Clean
-* Fast
-* Mobile-friendly
-* Enterprise-grade
-* Fintech-style UI
-* Highly interactive
+This platform is designed specifically for startups that need simple financial clarity without using complex enterprise accounting software.
 
-IMPORTANT:
+---
 
-* Do NOT skip ANY feature
-* Do NOT generate partial code
-* Do NOT stop midway
-* Do NOT summarize
-* Do NOT use placeholders
-* Generate FULL code for every file
-* Continue automatically until the module is complete
-* Use professional folder structure
-* Use reusable components
-* Include comments where needed
-* Make the UI visually premium and startup-grade
+# 📌 Overview
 
-==================================================
-TECH STACK (USE EXACTLY)
-========================
+Managing startup finances using spreadsheets, chats, and disconnected tools often creates confusion and poor financial visibility.
 
-Frontend Framework:
+The **Startup Finance Management Platform** solves this problem by providing:
+
+* Centralized expense tracking
+* Burn rate monitoring
+* Runway calculation
+* Team-wise spending insights
+* Financial analytics dashboard
+* Manual bank balance tracking
+* Reports & analytics
+* Smart financial alerts
+
+The system is lightweight, responsive, scalable, and startup-focused.
+
+---
+
+# 🎯 Problem Statement
+
+Early-stage startups commonly face these issues:
+
+* Expenses tracked across Excel sheets, chats, and notes
+* No clear visibility into startup runway
+* Lack of burn rate awareness
+* Difficulty identifying overspending teams
+* No centralized financial dashboard
+* Poor financial decision-making support
+
+This platform helps startups gain financial clarity through simple and intelligent financial tracking.
+
+---
+
+# ✨ Core Features
+
+## 🔐 Shared Company Login
+
+Simple startup-friendly authentication system.
+
+### Features
+
+* Company email & password login
+* Shared workspace access
+* Secure session handling
+* Protected routes
+* Persistent authentication
+
+---
+
+## 📊 Financial Dashboard
+
+The dashboard provides instant startup financial visibility.
+
+### Dashboard Includes
+
+* Total Available Funds
+* Monthly Expenses
+* Burn Rate
+* Remaining Runway
+* Team-wise Spending
+* Category-wise Expense Breakdown
+* Financial Trend Charts
+* Recent Expenses
+* Financial Alerts
+
+---
+
+## 💳 Expense Management
+
+Track and manage startup expenses efficiently.
+
+### Features
+
+* Add expenses
+* Edit expenses
+* Delete expenses
+* Upload receipts/bills
+* Expense history tracking
+* Expense search
+* Category filters
+* Team filters
+* Date range filtering
+* Expense analytics
+
+---
+
+## 🏦 Manual Bank Account Tracking
+
+⚠️ The system does NOT connect to real banking APIs.
+
+### Features
+
+* Manual balance entry
+* Internal balance calculations
+* Multiple bank accounts
+* Transaction history
+* Automatic expense deduction
+* Balance summary cards
+
+This keeps the platform secure, lightweight, and legally safe.
+
+---
+
+## 👥 Team & Department Management
+
+Manage startup teams and monitor spending.
+
+### Features
+
+* Create departments
+* Create teams
+* Add team members
+* Assign salaries
+* Team-wise spending analytics
+* Monthly budget tracking
+* High-cost department detection
+
+---
+
+## 📈 Burn Rate & Runway Analysis
+
+Automatically calculate startup financial health.
+
+### Burn Rate Formula
+
+```text
+Burn Rate = Total Monthly Expenses
+```
+
+### Runway Formula
+
+```text
+Runway = Available Funds / Monthly Burn Rate
+```
+
+The system updates these values automatically whenever financial records change.
+
+---
+
+## 📊 Reports & Analytics
+
+Analyze startup financial performance visually.
+
+### Analytics Features
+
+* Monthly reports
+* Annual reports
+* Expense summaries
+* Burn rate analysis
+* Runway analysis
+* Team analytics
+* Financial trend charts
+
+---
+
+## 🔔 Smart Financial Alerts
+
+Get notified about important financial conditions.
+
+### Alert Types
+
+* Low runway warning
+* Budget exceeded alerts
+* Overspending notifications
+* Salary spike warnings
+
+---
+
+## 📂 Bill & Document Storage
+
+Upload and manage financial documents securely.
+
+### Supported Files
+
+* PDF receipts
+* Images
+* Bills & invoices
+
+---
+
+# 🧠 Future AI Features (Planned)
+
+The current version focuses on the core MVP.
+
+Future versions may include:
+
+* AI financial recommendations
+* AI chatbot assistant
+* Financial forecasting
+* Scenario simulation engine
+* Risk analysis system
+* Budget optimization suggestions
+
+---
+
+# 💰 Pricing Model
+
+## Current Pricing Strategy
+
+* 100% Free Access
+* No subscription plans
+* No premium features
+* No payment gateway integration
+
+### Current Focus
+
+* Product validation
+* User feedback
+* Platform stability
+* Startup adoption
+
+---
+
+## Future Pricing Plans (Planned)
+
+### 🟢 Free Plan
+
+* Basic expense tracking
+* Dashboard access
+* Manual bank tracking
+
+### 🔵 Pro Plan
+
+* Advanced analytics
+* Smart financial insights
+* AI-powered recommendations
+
+### 🟣 Growth Plan
+
+* Forecasting tools
+* Investor-ready reports
+* Advanced financial intelligence
+
+---
+
+# 💸 Investment Strategy
+
+## Current Status
+
+The platform is fully bootstrapped.
+
+### No External Funding
+
+* No investors
+* No venture capital
+* No angel funding
+* No equity dilution
+
+---
+
+## Why Bootstrap?
+
+* Full ownership control
+* Low financial risk
+* Lean startup development
+* Flexible product decisions
+
+---
+
+# 📈 Growth Strategy
+
+## Initial Target Market
+
+* Early-stage startups
+* Bootstrapped founders
+* Small startup teams
+* Freelancer agencies
+
+---
+
+## Growth Channels
+
+* Startup communities
+* LinkedIn outreach
+* Founder networks
+* Indie Hacker groups
+* Startup incubators
+* College entrepreneurship cells
+
+---
+
+## Product-Led Growth
+
+* Shareable reports
+* Invite teammates
+* Dashboard sharing
+* Community adoption
+
+---
+
+# 🔄 User Workflow
+
+## Daily Workflow
+
+1. Login to company workspace
+2. Add expenses
+3. Upload bills
+4. Monitor dashboard
+5. Review spending insights
+
+---
+
+## Weekly Workflow
+
+1. Analyze team spending
+2. Monitor burn rate
+3. Track runway trends
+
+---
+
+## Monthly Workflow
+
+1. Review reports
+2. Analyze financial growth
+3. Optimize startup spending
+
+---
+
+# 🏗️ Tech Stack
+
+## Frontend
 
 * React.js
 * JavaScript
 * Vite
-
-Styling/UI:
-
 * Tailwind CSS
 * Shadcn UI
-* Framer Motion
-* Lucide React Icons
-
-Charts & Analytics:
-
+* Zustand
+* Axios
 * Recharts
-
-Forms & Validation:
-
+* Framer Motion
 * React Hook Form
 * Zod
 
-State Management:
+---
 
-* Zustand
+## Backend (Planned)
 
-Routing:
+* Node.js
+* Express.js
+* Firebase / Supabase
+* MongoDB / PostgreSQL
 
-* React Router DOM
+---
 
-API Layer:
+# 📱 Responsive Design
 
-* Axios
+The platform is fully responsive and optimized for:
 
-DO NOT USE:
-
-* TypeScript
-* Next.js
-
-==================================================
-PROJECT OVERVIEW
-================
-
-This platform helps startups and small teams:
-
-* Track expenses
-* Monitor burn rate
-* Calculate runway
-* Manage departments & employees
-* Analyze startup spending
-* Get financial visibility
-
-IMPORTANT:
-AI features are NOT part of the current MVP.
-
-AI modules should ONLY be prepared as future scalable architecture placeholders.
-
-DO NOT build:
-
-* AI chatbot backend
-* AI recommendation engine
-* AI forecasting system
-
-Only keep frontend structure scalable for future AI integration.
-
-==================================================
-CURRENT MVP FEATURES
-====================
-
-1. Shared Login System
-2. Financial Dashboard
-3. Expense Management
-4. Manual Bank Tracking
-5. Team & Department Management
-6. Employee & Salary Management
-7. Burn Rate Calculation
-8. Runway Calculation
-9. Reports & Analytics
-10. Smart Alerts
-11. Bill & Document Upload
-12. Dark Mode
-13. Responsive Design
-
-==================================================
-AUTHENTICATION SYSTEM
-=====================
-
-Create:
-
-* Login Page
-* Forgot Password Page
-* Session Persistence
-
-Authentication Logic:
-
-* Shared company login
-* Company email + password
-* JWT token structure
-* Protected routes
-* Secure local storage
-* Logout functionality
-
-Features:
-
-* Password show/hide
-* Validation
-* Error handling
-* Toast notifications
-* Loading states
-
-==================================================
-APP USER FLOW
-=============
-
-User Flow:
-
-1. Login to company workspace
-2. Setup company details
-3. Add bank balance
-4. Create categories
-5. Create teams/departments
-6. Add expenses daily
-7. Monitor dashboard
-8. Review analytics and reports
-
-Generate frontend based on this COMPLETE flow.
-
-==================================================
-DASHBOARD MODULE
-================
-
-Create a modern fintech dashboard.
-
-Dashboard Cards:
-
-* Available Funds
-* Monthly Expenses
-* Burn Rate
-* Remaining Runway
-* Team Spending
-
-Charts:
-
-* Expense Trend Line Chart
-* Category Pie Chart
-* Team Spending Bar Chart
-* Burn History Area Chart
-* Runway Visualization
-
-Widgets:
-
-* Recent Expenses
-* Monthly Summary
-* Spending Insights
-* Quick Actions
-* Financial Alerts
-
-Use Recharts.
-
-==================================================
-EXPENSE MANAGEMENT MODULE
-=========================
-
-Pages:
-
-* Expense List
-* Add Expense
-* Expense Details
-* Edit Expense
-
-Features:
-
-* Add expense
-* Edit expense
-* Delete expense
-* Search expenses
-* Filter by category
-* Filter by team
-* Date filtering
-* Pagination
-* Sorting
-* Expense history
-* Bill upload
-* PDF/Image preview
-
-Expense Fields:
-
-* Title
-* Amount
-* Category
-* Team
-* Bank Account
-* Description
-* Date
-* Attachment
-
-==================================================
-BANK ACCOUNT TRACKING
-=====================
-
-IMPORTANT:
-The system does NOT connect to real bank APIs.
-
-Create manual bank tracking UI.
-
-Features:
-
-* Add bank accounts
-* Show current balance
-* Deduct expense amount automatically
-* Show transaction history
-* Balance summary cards
-
-==================================================
-TEAM & DEPARTMENT MODULE
-========================
-
-Pages:
-
-* Team List
-* Create Team
-* Team Details
-* Department Analytics
-
-Features:
-
-* Create departments
-* Add members
-* Assign salaries
-* Monthly budgets
-* Team spending analytics
-* High-cost team detection
-
-==================================================
-EMPLOYEE MANAGEMENT MODULE
-==========================
-
-Pages:
-
-* Employee List
-* Add Employee
-* Employee Profile
-
-Features:
-
-* Add employee
-* Assign team
-* Salary assignment
-* Employment type
-* Joining date
-* Monthly cost tracking
-
-==================================================
-REPORTS & ANALYTICS
-===================
-
-Pages:
-
-* Monthly Reports
-* Annual Reports
-* Team Reports
-* Financial Analytics
-
-Features:
-
-* Export CSV
-* Export PDF
-* Expense summaries
-* Burn analysis
-* Runway analysis
-* Team analytics
-
-==================================================
-SMART ALERT SYSTEM
-==================
-
-Create:
-
-* Notification dropdown
-* Alert center
-* Toast alerts
-
-Alerts:
-
-* Low runway warning
-* Overspending alert
-* Salary spike alert
-* Budget exceeded warning
-
-==================================================
-FILE & BILL STORAGE UI
-======================
-
-Features:
-
-* Drag & drop upload
-* PDF preview
-* Image preview
-* File progress
-* Delete uploaded file
-
-==================================================
-SETTINGS MODULE
-===============
-
-Pages:
-
-* Profile Settings
-* Company Settings
-* Notification Settings
-
-Features:
-
-* Theme toggle
-* Currency settings
-* Company profile
-* Change password
-* Notification preferences
-
-==================================================
-RESPONSIVE DESIGN (VERY IMPORTANT)
-==================================
-
-The entire frontend MUST work perfectly on:
-
-* Android devices
+* Mobile devices
 * Tablets
 * Laptops
-* Desktop
+* Desktop screens
 
-Create:
+---
 
-* Mobile sidebar
-* Responsive navbar
-* Adaptive tables
-* Responsive charts
-* Mobile-friendly forms
+# 🌙 UI/UX Features
 
-==================================================
-DARK MODE
-=========
-
-Implement:
-
+* Modern fintech dashboard
 * Dark mode
-* Light mode
-* Theme persistence
-* Smooth transitions
-
-==================================================
-UI/UX REQUIREMENTS
-==================
-
-Design Style:
-
-* Modern fintech SaaS
-* Premium dashboard UI
-* Glassmorphism
-* Soft shadows
-* Rounded cards
-* Clean typography
+* Responsive layout
+* Glassmorphism design
 * Smooth animations
-
-Use:
-
-* Framer Motion animations
-* Skeleton loaders
-* Empty states
-* Tooltips
-* Smooth transitions
-* Hover effects
 * Interactive charts
+* Skeleton loaders
+* Toast notifications
+* Clean typography
 
-==================================================
-DATABASE STRUCTURE SUPPORT
-==========================
+---
 
-Frontend should support these modules:
+# 📂 Project Structure
 
-* companies
-* users
-* teams
-* members
-* expenses
-* categories
-* bankAccounts
-* departments
-* notifications
-* monthlyAnalytics
-* transactions
-
-==================================================
-STATE MANAGEMENT
-================
-
-Use Zustand stores for:
-
-* Auth
-* Dashboard
-* Expenses
-* Teams
-* Employees
-* Notifications
-* Theme
-
-==================================================
-API SETUP
-=========
-
-Create:
-
-* Axios instance
-* API interceptors
-* JWT token handling
-* Refresh token handling
-* Error handling layer
-* Reusable API services
-
-==================================================
-ROUTING & SECURITY
-==================
-
-Use React Router DOM.
-
-Implement:
-
-* Protected routes
-* Auth guards
-* Session persistence
-* Secure token storage
-* Form sanitization
-
-==================================================
-PERFORMANCE OPTIMIZATION
-========================
-
-Add:
-
-* Lazy loading
-* Code splitting
-* Memoization
-* Optimized rendering
-* Image optimization
-
-==================================================
-CREATE COMPLETE FOLDER STRUCTURE
-================================
-
-Generate FULL scalable folder structure:
-
+```bash
 src/
 │
 ├── assets/
 ├── components/
-│   ├── ui/
-│   ├── charts/
-│   ├── dashboard/
-│   ├── expenses/
-│   ├── teams/
-│   ├── employees/
-│   ├── analytics/
-│   ├── notifications/
-│   ├── layout/
-│   └── common/
-│
 ├── pages/
-│   ├── auth/
-│   ├── dashboard/
-│   ├── expenses/
-│   ├── teams/
-│   ├── employees/
-│   ├── reports/
-│   ├── analytics/
-│   ├── settings/
-│   └── onboarding/
-│
-├── routes/
 ├── hooks/
 ├── services/
 ├── store/
-├── utils/
-├── constants/
-├── context/
-├── providers/
+├── routes/
 ├── layouts/
+├── utils/
 ├── styles/
-├── lib/
-└── data/
+└── lib/
+```
 
-==================================================
-OUTPUT FORMAT RULES
-===================
+---
 
-Generate project in THIS ORDER:
+# 🚀 Getting Started
 
-1. Folder structure
-2. Package installation
-3. Tailwind setup
-4. Shadcn setup
-5. Routing setup
-6. Zustand setup
-7. Axios setup
-8. Layout system
-9. Authentication pages
-10. Dashboard pages
-11. Expense module
-12. Team module
-13. Employee module
-14. Analytics module
-15. Notification system
-16. Settings module
-17. Responsive optimization
-18. Dark mode
-19. Final production optimization
+## Clone Repository
 
-==================================================
-IMPORTANT OUTPUT RULES
-======================
+```bash
+git clone <repository-url>
+```
 
-For EVERY file:
+---
 
-1. Show COMPLETE file path first
+## Install Dependencies
 
-Example:
-src/components/dashboard/DashboardCard.jsx
+```bash
+npm install
+```
 
-2. Then generate FULL code.
+---
 
-3. After one file automatically continue to next file.
+## Start Development Server
 
-4. Never stop midway.
+```bash
+npm run dev
+```
 
-5. If response limit is reached:
+---
 
-* continue automatically from last generated file
-* do not restart
-* do not summarize
-* do not ask for confirmation
+## Build Project
 
-==================================================
-FINAL GOAL
-==========
+```bash
+npm run build
+```
 
-Generate a COMPLETE production-ready frontend codebase for a startup financial management platform using React.js and JavaScript with an extremely modern, responsive, and visually attractive SaaS UI.
+---
+
+# 🔐 Security Features
+
+* JWT Authentication
+* Protected Routes
+* Secure Local Storage
+* Form Validation
+* Input Sanitization
+
+---
+
+# 📌 Current MVP Includes
+
+✅ Financial Dashboard
+✅ Expense Management
+✅ Manual Bank Tracking
+✅ Team Management
+✅ Reports & Analytics
+✅ Burn Rate Calculation
+✅ Runway Tracking
+✅ Responsive UI
+✅ Dark Mode
+
+---
+
+# 🚀 Future Roadmap
+
+* AI recommendations
+* AI chatbot
+* Scenario simulation
+* Subscription billing
+* Investor reporting
+* Advanced forecasting
+* Role-based access
+
+---
+
+# 🧠 Long-Term Vision
+
+The long-term vision is to build a complete startup financial intelligence platform that helps founders:
+
+* Understand startup financial health
+* Extend runway
+* Reduce financial risk
+* Improve financial decision-making
+* Analyze startup growth efficiently
+
+---
+
+# ❤️ Built For Startups
+
+Designed to give founders financial clarity without complicated accounting systems.
