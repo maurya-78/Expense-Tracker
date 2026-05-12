@@ -482,3 +482,4 @@ The long-term vision is to build a complete startup financial intelligence platf
 # ❤️ Built For Startups
 
 Designed to give founders financial clarity without complicated accounting systems.
+
