@@ -141,7 +141,6 @@ Burn Rate = Total Monthly Expenses
 ```text
 Runway = Available Funds / Monthly Burn Rate
 ```
-
 The system updates these values automatically whenever financial records change.
 
 ---
@@ -428,7 +427,6 @@ npm run dev
 ```bash
 npm run build
 ```
-
 ---
 
 # 🔐 Security Features
@@ -482,4 +480,3 @@ The long-term vision is to build a complete startup financial intelligence platf
 # ❤️ Built For Startups
 
 Designed to give founders financial clarity without complicated accounting systems.
-
