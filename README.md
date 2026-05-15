@@ -393,7 +393,6 @@ src/
 ├── styles/
 └── lib/
 ```
-
 ---
 
 # 🚀 Getting Started
@@ -411,7 +410,6 @@ git clone <repository-url>
 ```bash
 npm install
 ```
-
 ---
 
 ## Start Development Server
@@ -419,7 +417,6 @@ npm install
 ```bash
 npm run dev
 ```
-
 ---
 
 ## Build Project
