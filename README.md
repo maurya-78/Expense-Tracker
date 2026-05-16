@@ -5,7 +5,6 @@ A modern and intelligent financial management platform built for startups, boots
 This platform is designed specifically for startups that need simple financial clarity without using complex enterprise accounting software.
 
 ---
-
 # 📌 Overview
 
 Managing startup finances using spreadsheets, chats, and disconnected tools often creates confusion and poor financial visibility.
